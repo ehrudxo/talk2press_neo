@@ -1,4 +1,4 @@
-/** @jsx React.DOM */
+import React, { PropTypes } from 'react';
 import SocketService from '../util/SocketService';
 const socketService = new SocketService();
 
@@ -40,11 +40,12 @@ var getMessageObj = function(msg){
             contents: msg,
             currentTime:"오후3:08"}
 }
-var FirstFMsg = React.createClass({displayName: "FirstFMsg",
-  contextTypes: {
-    router: React.PropTypes.func
-  },
-  render: function(){
+export class FirstFMsg {
+  static propTypes = {
+    params: PropTypes.object.isRequired,
+    query: PropTypes.object.isRequired
+  };
+  render(){
     return(
       React.createElement("div", null,
         React.createElement("div", {className: "profile"},
@@ -56,13 +57,14 @@ var FirstFMsg = React.createClass({displayName: "FirstFMsg",
         )
       )
     );
-  }
-});
-var Friend_Message = React.createClass({displayName: "Friend_Message",
-  contextTypes: {
-    router: React.PropTypes.func
-  },
-  render: function() {
+  };
+};
+export class Friend_Message {
+  static propTypes = {
+    params: PropTypes.object.isRequired,
+    query: PropTypes.object.isRequired
+  };
+  render() {
     return(
       React.createElement("div", null,
         React.createElement("div", {className: "wrapchat"},
@@ -81,13 +83,14 @@ var Friend_Message = React.createClass({displayName: "Friend_Message",
       )
     );
   }
-});
+};
 
-var User_Message = React.createClass({displayName: "User_Message",
-  contextTypes: {
-    router: React.PropTypes.func
-  },
-  render : function() {
+export class User_Message {
+  static propTypes = {
+    params: PropTypes.object.isRequired,
+    query: PropTypes.object.isRequired
+  };
+  render () {
     return(
       React.createElement("div", null,
         React.createElement("div", {className: "wrapchat"},
@@ -98,22 +101,23 @@ var User_Message = React.createClass({displayName: "User_Message",
         )
       )
     );
-  }
-});
-var Line_Break = React.createClass({displayName: "Line_Break",
-
-  contextTypes: {
-    router: React.PropTypes.func
-  },
-  render : function(){
+  };
+};
+export class Line_Break{
+  static propTypes = {
+    params: PropTypes.object.isRequired,
+    query: PropTypes.object.isRequired
+  };
+  render (){
     return(React.createElement("div", {className: "line-break"}));
-  }
-});
-var InputMsg = React.createClass({displayName: "InputMsg",
-  contextTypes: {
-    router: React.PropTypes.func
-  },
-  talk : function(e){
+  };
+};
+export class InputMsg{
+  static propTypes = {
+    params: PropTypes.object.isRequired,
+    query: PropTypes.object.isRequired
+  };
+  talk (e){
     var socket = this.props.socketService;
     var textMessage = this.refs.userInput.getDOMNode().value;
     if(textMessage !== ''){
@@ -123,13 +127,13 @@ var InputMsg = React.createClass({displayName: "InputMsg",
                           }, messageHanlder.bind(this));
       this.refs.userInput.getDOMNode().value = '';
     }
-  },
-  handleChange : function(evt){
+  };
+  handleChange (evt){
     if (evt.keyCode == 13 ) {
       this.talk();
     }
-  },
-  render : function(){
+  };
+  render (){
     return (
       React.createElement("div", {className: "inputTools"},
       React.createElement("div", {className: "wrapInput"},
@@ -141,46 +145,58 @@ var InputMsg = React.createClass({displayName: "InputMsg",
       React.createElement("button", {className: "btnSend", onClick: this.talk}, "전송")
       )
     );
+  };
+};
+export class Content {
+  static propTypes = {
+    params: PropTypes.object.isRequired,
+    query: PropTypes.object.isRequired
+  };
+  getInitialState() {
+    socketService.addHandler(function(message){
+      if (message.$type === 'broadcasted') {
+        if (!message.data) return;
+        messages.push(message.data);
+        this.onChange();
+      }
+    }.bind(this));
+    return {
+        messages : this.props.messages
+    };
+  };
+  onChange(){
+    this.setState({messages:messages});
+  };
+  render() {
+      var messagesCon=[];
+      if(this.state.messages && this.state.messages.length > 0){
+          this.state.messages.forEach(function( message ){
+            if(message.username){
+              messagesCon.push(React.createElement(Friend_Message, {message: message}));
+            }else{
+              messagesCon.push(React.createElement(User_Message, {message: message}));
+            }
+            messagesCon.push(React.createElement(Line_Break, null));
+          }.bind(this));
+      }
+      return (
+          React.createElement("div", null,
+            React.createElement("div", {className: "messageBox"},
+            messagesCon
+            ),
+           React.createElement(InputMsg, {onChange: this.onChange, socketService: this.props.socketService})
+          )
+      );
   }
-});
-var Content = React.createClass({displayName: "Content",
-    contextTypes: {
-      router: React.PropTypes.func
-    },
-    getInitialState: function() {
-      socketService.addHandler(function(message){
-        if (message.$type === 'broadcasted') {
-          if (!message.data) return;
-          messages.push(message.data);
-          this.onChange();
-        }
-      }.bind(this));
-      return {
-          messages : this.props.messages
-      };
-    },
-    onChange : function(){
-      this.setState({messages:messages});
-    },
-    render: function() {
-        var messagesCon=[];
-        if(this.state.messages && this.state.messages.length > 0){
-            this.state.messages.forEach(function( message ){
-              if(message.username){
-                messagesCon.push(React.createElement(Friend_Message, {message: message}));
-              }else{
-                messagesCon.push(React.createElement(User_Message, {message: message}));
-              }
-              messagesCon.push(React.createElement(Line_Break, null));
-            }.bind(this));
-        }
-        return (
-            React.createElement("div", null,
-              React.createElement("div", {className: "messageBox"},
-              messagesCon
-              ),
-             React.createElement(InputMsg, {onChange: this.onChange, socketService: this.props.socketService})
-            )
-        );
-    }
-});
+}
+export default class TalkPage {
+  static propTypes = {
+    params: PropTypes.object.isRequired,
+    query: PropTypes.object.isRequired
+  };
+  render() {
+    return (
+      <Content messages={messages} socketService={socketService}/>
+    );
+  }
+}
