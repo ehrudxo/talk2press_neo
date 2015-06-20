@@ -1,14 +1,9 @@
 import routes from './routes';
 import {
   create as createRouter,
-  HistoryLocation,
   HashLocation
 } from 'react-router';
-
-// Use hash location for Github Pages
-// but switch to HTML5 history locally.
-const location = process.env.NODE_ENV === 'production' ?
-  HashLocation :
-  HistoryLocation;
+//because of express we use. Only HashLocation enables.
+const location = HashLocation;
 
 export default createRouter({ routes, location });
