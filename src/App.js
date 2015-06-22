@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import StatusBar from './layout/StatusBar';
+import AppBar from './layout/AppBar'
 import DocumentTitle from 'react-document-title';
 import { RouteHandler } from 'react-router';
 
@@ -14,9 +15,8 @@ export default class App {
       <DocumentTitle title='Talk2Press'>
         <div>
           <StatusBar/>
+          <AppBar/>
           <div className='App'>
-            hoola~
-            <hr />
             <RouteHandler {...this.props} />
           </div>
         </div>

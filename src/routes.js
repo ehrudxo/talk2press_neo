@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route } from 'react-router';
 import App from './App';
-import AppClone from './AppClone';
+import LoginPage from './pages/LoginPage';
 
 export default (
-  <Route name='explore' path='/' handler={App}>
-    <Route name='EntryClone' path='/:clone' handler={AppClone} />
+  <Route path='/' handler={App}>
+    <Route path='login' handler={LoginPage} />
   </Route>
 );

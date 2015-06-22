@@ -1,4 +1,5 @@
 import "../css/kakao.less";
+import "font-awesome-webpack";
 import React from 'react';
 import router from './router';
 
