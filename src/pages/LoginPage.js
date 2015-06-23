@@ -5,6 +5,16 @@ import UserStore from '../stores/UserStore';
 import UserCard from '../components/UserCard';
 import connectToStores from '../util/connectToStores';
 
+const DEFAULT_LOGIN = 'ehrudxo';
+const GITHUB_REPO = 'https://github.com/gaearon/flux-react-router-example';
+
+function parseFullName(params) {
+  if (!params.login) {
+    return DEFAULT_LOGIN;
+  }
+  return params.login + (params.name ? '/' + params.name : '');
+}
+
 function parseLogin(params) {
   return params.login;
 }
@@ -39,7 +49,10 @@ export default class LoginPage {
     user: PropTypes.object
   };
 
-  constructor() {
+  constructor(props) {
+    this.state = {
+      login: parseFullName(props.params)
+    };
   }
 
   componentWillMount() {
@@ -52,6 +65,8 @@ export default class LoginPage {
     }
   }
   render() {
+    const { user, params } = this.props;
+    const login = parseLogin(params);
     return (
       <DocumentTitle title={'Login'}>
         <div className='login-entry'>

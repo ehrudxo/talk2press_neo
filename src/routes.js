@@ -5,6 +5,6 @@ import LoginPage from './pages/LoginPage';
 
 export default (
   <Route path='/' handler={App}>
-    <Route path='login' handler={LoginPage} />
+    <Route name='login' path='login' handler={LoginPage} />
   </Route>
 );
