@@ -15,12 +15,21 @@ input{
   background-color: #1A1E22;
   color : white;
 }
-button{
+.buttoned{
   border:@btn-border;
   background-color : #373D48;
   color : white;
 }
+button{
+  .buttoned;
+}
+a {
+  color : #FFF;
+  font-weight: bolder;
+  text-decoration: none;
+}
 .right {text-align: right;}
+.fright{float: right;margin-right: 5px;}
 .center {text-align: center;}
 .semi-title{
   font-size: 30px;
@@ -31,12 +40,26 @@ button{
 .user-search{
   height: 30px;
   font-size: 20px;
-  width :  70%;
+  width :  74%;
+  margin-left : 5%;
+}
+.user-card{
+  width: 90%;
+  margin-left: 5%;
+  .buttoned;
+}
+.user-card .user-name {
+  position: absolute;
+  margin-top:30px;
+  margin-left: 20px;
+  font-size: 30px;
 }
 .user-search-btn{
   height: 30px;
   font-size: 20px;
-  width :  25%;
+  width :  15%;
+  margin-right: 5%;
+  float: right;
 }
 .status-bar{
   background-color: black;
@@ -72,4 +95,12 @@ button{
   float: left;
   margin-top :10px;
   margin-left :5px;
+}
+.circleProfile{
+  border-radius: 50%;
+}
+.profileGap{
+  margin-left: 20px;
+  margin-top :10px;
+  margin-bottom :10px;
 }

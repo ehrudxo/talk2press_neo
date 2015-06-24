@@ -13,12 +13,14 @@ export default class User {
     const { user } = this.props;
 
     return (
-      <div className='User'>
+      <div className="user-card">
         <Link to='login' params={{ login: user.login }}>
-          <img src={user.avatarUrl} width='72' height='72' />
-          <h3>
-            {user.login} {user.name && <span>({user.name})</span>}
-          </h3>
+          <span>
+          <img className="circleProfile profileGap" src={user.avatarUrl} width='72' height='72' />
+          </span>
+          <span className="user-name">
+            {user.login}
+          </span>
         </Link>
       </div>
     );
