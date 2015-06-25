@@ -3,18 +3,15 @@
 ** changed to ES6
 **/
 'use strict';
+var pendingCallbacks = {};
+var currentMessageId = 0;
+var ws;
+var preConnectionRequests = [];
+var connected = false;
+var handlers=[];
 export default class SocketService{
 	constructor(){
-		var service = {};
-		var pendingCallbacks = {};
-		var currentMessageId = 0;
-		var ws;
-		var preConnectionRequests = [];
-		var connected = false;
-		var handlers=[];
-
 		ws = new WebSocket("ws://" + window.location.hostname + (location.port ? ':' + location.port : ''));
-
 		ws.onopen = function () {
 			connected = true;
 			if (preConnectionRequests.length === 0) return;
@@ -36,6 +33,7 @@ export default class SocketService{
 				handlers[i](msg)
 			}
 		};
+
 	}
 
 	sendRequest(request, cb ) {
@@ -44,7 +42,7 @@ export default class SocketService{
 			init();
 		}
 
-		request.$id = generateMessageId();
+		request.$id = this.generateMessageId();
 		pendingCallbacks[request.$id] = cb;
 		if (!connected) {
 			preConnectionRequests.push(request);
@@ -54,10 +52,7 @@ export default class SocketService{
 		return request.$id;
 	}
 
-	listener(message,broadcast_callback) {
-		if (pendingCallbacks.hasOwnProperty(message.$id))
-			pendingCallbacks[message.$id](message);
-	}
+
 
 	requestComplete(id) {
 		delete pendingCallbacks[id];
@@ -79,4 +74,9 @@ export default class SocketService{
 	getHandlers(){
 		return handlers;
 	}
+}
+
+function listener(message,broadcast_callback) {
+	if (pendingCallbacks.hasOwnProperty(message.$id))
+		pendingCallbacks[message.$id](message);
 }

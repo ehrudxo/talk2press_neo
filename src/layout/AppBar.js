@@ -1,25 +1,24 @@
-import React, { PropTypes } from 'react';
-import * as LoginUtils from '../util/LoginUtils';
+import React from 'react';
+import * as LoginUtil from '../util/LoginUtils';
 
-export default class StatusBar{
-  constructor(props){
-  }
-  static contextTypes = {
-    router: PropTypes.func.isRequired
-  };
+export default class AppBar{
   render() {
     var title = this.props.title;
-    var isLogin = LoginUtils.isLogin();
+    var isLogin = LoginUtil.isLogin();
     if(!title)title="Talk2Press";
     return (
         <div className="app-bar">
           <div className="app-bar-title">
             {title}
             <span className="fright">
-              {isLogin?<button>logout</button>:<span/>}
+              {isLogin?<button onClick={this.logout}>logout</button>:<span/>}
             </span>
           </div>
         </div>
     );
+  }
+  logout(){
+    LoginUtil.logout();
+    location.href='/login';
   }
 }

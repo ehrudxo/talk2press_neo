@@ -5,13 +5,7 @@ import Telecompany from '../components/Telecompany';
 import Wifi from '../components/Wifi';
 
 export default class StatusBar {
-  static propTypes = {
-  };
-  static contextTypes = {
-    router: PropTypes.func.isRequired
-  };
   render() {
-
     return (
         <div className="status-bar">
           <Telecompany/>

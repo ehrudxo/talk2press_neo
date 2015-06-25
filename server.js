@@ -21,6 +21,7 @@ app.ws('/', function(ws, req) {
     broadcastObj.$type="broadcasted";
     //wss.broadcast( JSON.stringify(broadcastObj) );
     wss.clients.forEach(function (client) {
+      console.log(broadcastObj);
       client.send(JSON.stringify(broadcastObj));
     });
   });

@@ -1,9 +1,12 @@
 import React, { PropTypes } from 'react';
 import SocketService from '../util/SocketService';
+import moment from 'moment';
+import * as LoginUtil from '../util/LoginUtils';
+
 const socketService = new SocketService();
 
 var messages =[];
-var messageHanlder = function(message){
+var messageHanlder = function(message,callback){
   if (message.$type === 'dataReceived') {
     if (!message.data) return;
     messages.push(message.data);
@@ -22,23 +25,11 @@ var messageHanlder = function(message){
     this.refs.userInput.getDOMNode().value='';
   }
 }
-
-
-/*
-messages.push({username:"팀레고", profileImg:"./img/profile_kakao_04.png",contents:"어디야 1234567890123",currentTime:"오후3:08"});
-messages.push({contents:"신촌", currentTime:"오후3:09"});
-messages.push({username:"팀레고", profileImg:"./img/profile_kakao_04.png",contents:"뭐해 나 배고픈데..."});
-messages.push({username:"팀레고", contents:"뭐해 나 배고픈데..."});
-messages.push({username:"팀레고", contents:"뭐해 나 배고픈데...",currentTime:"오후3:09"});
-messages.push({contents:"나도 배고파. 같이 밥 먹을까? 넌 어딘데?",currentTime:"오후3:09"});
-messages.push({username:"팀레고", profileImg:"./img/profile_kakao_04.png",contents:"여기는 홍대 입구 역인데 빨리가면 30분 안에 갈수 있지 않을까? 배고플땐.여기는 홍대 입구 역인데 빨리가면 30분 안에 갈수 있지 않을까? 배고플땐.여기는 홍대 입구 역인데 빨리가면 30분 안에 갈수 있지 않을까? 배고플땐."});
-messages.push({username:"팀레고", contents:"여기는 홍대 입구 역인데 빨리가면 30분 안에 갈수 있지 않을까? 배고플땐.여기는 홍대 입구 역인데 빨리가면 30분 안에 갈수 있지 않을까? 배고플땐.여기는 홍대 입구 역인데 빨리가면 30분 안에 갈수 있지 않을까? 배고플땐.",currentTime:"오후3:10"});
-*/
-var getMessageObj = function(msg){
-  return {  username:"팀레고",
-            profileImg:"./img/profile_kakao_04.png",
+var getMessageObj = function( msg, user ){
+  return {  username:user.login,
+            profileImg:user.avatarUrl,
             contents: msg,
-            currentTime:"오후3:08"}
+            currentTime:moment().format('A hh:mm')}
 }
 export class FirstFMsg {
   static propTypes = {
