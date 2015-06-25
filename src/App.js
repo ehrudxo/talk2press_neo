@@ -9,14 +9,13 @@ export default class App {
     params: PropTypes.object.isRequired,
     query: PropTypes.object.isRequired
   };
-
   render() {
     return (
       <DocumentTitle title='Talk2Press'>
         <div>
           <StatusBar/>
           <AppBar/>
-          <div className='App'>
+          <div className='app-entry'>
             <RouteHandler {...this.props} />
           </div>
         </div>

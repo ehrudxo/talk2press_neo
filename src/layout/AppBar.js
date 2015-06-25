@@ -19,6 +19,6 @@ export default class AppBar{
   }
   logout(){
     LoginUtil.logout();
-    location.href='/login';
+    location.href='/#login';
   }
 }
